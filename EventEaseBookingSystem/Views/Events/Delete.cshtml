@@ -1,0 +1,25 @@
+﻿@model EventEaseBookingSystem.Models.Event
+
+@{
+    ViewData["Title"] = "Delete Event";
+}
+
+<h2>Delete Event</h2>
+
+<div class="alert alert-danger">
+    <p>Are you sure you want to delete this event?</p>
+</div>
+
+<div class="card p-3 mb-3">
+    <p><strong>Event ID:</strong> @Model.EventId</p>
+    <p><strong>Name:</strong> @Model.EventName</p>
+    <p><strong>Date:</strong> @Model.EventDate.ToShortDateString()</p>
+    <p><strong>Venue:</strong> @(Model.Venue?.VenueName ?? "N/A")</p>
+    <p><strong>Description:</strong> @Model.Description</p>
+</div>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="EventId" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
