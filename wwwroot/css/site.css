@@ -1,0 +1,79 @@
+body {
+    background-color: #000000;
+    color: #00FF00;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+/* ===== NAVBAR DESIGN ===== */
+
+.navbar {
+    background-color: #000000 !important; /* Black navbar */
+}
+
+.navbar-brand {
+    color: #00c853 !important; /* Green project title */
+    font-weight: bold;
+    font-size: 20px;
+}
+
+    .navbar-brand:hover {
+        color: #00e676 !important;
+    }
+
+/* Menu links */
+
+.navbar-nav .nav-link {
+    color: #00c853 !important; /* Green menu text */
+    font-weight: 500;
+    margin-right: 10px;
+}
+
+    .navbar-nav .nav-link:hover {
+        color: #ffffff !important; /* White when hovering */
+    }
+
+    /* Active page highlight */
+
+    .navbar-nav .nav-link.active {
+        color: #ffffff !important;
+        border-bottom: 2px solid #00c853;
+    }
+
+header, nav {
+    background-color: #111111;
+    padding: 10px 20px;
+}
+
+h1, h2, h3 {
+    color: #00FF00;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 100%;
+    table-layout: fixed;
+}
+
+th, td {
+    border: 1px solid #00FF00;
+    padding: 6px;
+    text-align: left;
+    word-wrap: break-word;
+}
+
+a, .btn {
+    color: #00FF00;
+    text-decoration: none;
+}
+
+    a:hover, .btn:hover {
+        color: #00AA00;
+    }
+
+
+
+.container {
+    padding: 10px 20px; /* gives breathing room for tables */
+}
