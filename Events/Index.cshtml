@@ -1,0 +1,153 @@
+﻿@model IEnumerable<EventEaseBookingSystem.Models.Event>
+
+@{
+    ViewData["Title"] = "Events";
+}
+
+<h2>Events</h2>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">
+        Create New Event
+    </a>
+</p>
+
+<form method="get" asp-action="Index" class="mb-3">
+
+    <div class="row">
+
+        <div class="col-md-3">
+            <label>Event Type</label>
+            <select name="eventType" class="form-control">
+                <option value="">All</option>
+
+                @foreach (var type in ViewBag.EventTypes)
+                {
+                    @if (ViewBag.SelectedEventType == type.EventTypeName)
+                    {
+                        <option value="@type.EventTypeName" selected>
+                            @type.EventTypeName
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="@type.EventTypeName">
+                            @type.EventTypeName
+                        </option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label>Start Date</label>
+            <input type="date"
+                   name="startDate"
+                   value="@ViewBag.StartDate"
+                   class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label>End Date</label>
+            <input type="date"
+                   name="endDate"
+                   value="@ViewBag.EndDate"
+                   class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label>Venue Availability</label>
+            <select name="venueAvailable" class="form-control">
+
+                <option value="">All</option>
+
+                @if (ViewBag.SelectedVenueAvailable != null && (bool)ViewBag.SelectedVenueAvailable)
+                {
+                    <option value="true" selected>Available</option>
+                }
+                else
+                {
+                    <option value="true">Available</option>
+                }
+
+                @if (ViewBag.SelectedVenueAvailable != null && !(bool)ViewBag.SelectedVenueAvailable)
+                {
+                    <option value="false" selected>Unavailable</option>
+                }
+                else
+                {
+                    <option value="false">Unavailable</option>
+                }
+
+            </select>
+        </div>
+
+    </div>
+
+    <br />
+
+    <button type="submit" class="btn btn-primary">
+        Filter
+    </button>
+
+</form>
+
+<table class="table table-bordered">
+
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Event Name</th>
+            <th>Event Type</th>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Venue</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                    {
+                        <img src="@item.ImageUrl"
+                             width="120"
+                             height="80"
+                             style="object-fit:cover;" />
+                    }
+                </td>
+
+                <td>@item.EventName</td>
+
+                <td>@item.EventType?.EventTypeName</td>
+
+                <td>@item.EventDate.ToString("yyyy-MM-dd HH:mm")</td>
+
+                <td>@item.Description</td>
+
+                <td>@item.Venue?.VenueName</td>
+
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.EventId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.EventId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.EventId">Delete</a>
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+
+</table>
