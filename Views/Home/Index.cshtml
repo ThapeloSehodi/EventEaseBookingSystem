@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["EventEaze"] = "Home";
+}
+
+<div class="text-center mt-4">
+
+    <img src="~/images/home-banner.jpg"
+         alt="EventEase Banner"
+         class="img-fluid rounded shadow"
+         style="max-width:100%; height:auto;" />
+
+    <div class="mt-4">
+        <h1 class="display-4">Welcome to EventEase</h1>
+
+        <p class="lead">
+            Manage venues, events, bookings, and customers all in one place.
+        </p>
+
+        <a asp-controller="Events"
+               asp-action="Index"
+               class="btn btn-primary me-2">
+            View Events
+        </a>
+
+        <a asp-controller="Bookings"
+               asp-action="Index"
+               class="btn btn-success me-2">
+            View Bookings
+        </a>
+
+        <a asp-controller="Venues"
+               asp-action="Index"
+               class="btn btn-warning">
+            View Venues
+        </a>
+    </div>
+
+</div>

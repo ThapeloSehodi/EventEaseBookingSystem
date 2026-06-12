@@ -1,0 +1,126 @@
+﻿@model IEnumerable<EventEaseBookingSystem.Models.Booking>
+
+@{
+    ViewData["Title"] = "Bookings";
+}
+
+<h2>Bookings</h2>
+
+<form method="get" asp-action="Index">
+
+    <div class="row mb-3">
+
+        <div class="col-md-4">
+
+            <input type="text"
+                   name="searchString"
+                   class="form-control"
+                   placeholder="Search by Booking ID or Event Name" />
+
+        </div>
+
+        <div class="col-md-2">
+
+            <button type="submit"
+                    class="btn btn-success">
+                Search
+            </button>
+
+        </div>
+
+    </div>
+
+</form>
+
+<p>
+    <a asp-action="Create"
+           class="btn btn-primary">
+        Create New Booking
+    </a>
+</p>
+
+<table class="table table-bordered table-striped">
+
+    <thead class="table-dark">
+
+        <tr>
+
+            <th>Booking ID</th>
+
+            <th>Customer</th>
+
+            <th>Email</th>
+
+            <th>Event</th>
+
+            <th>Event Date</th>
+
+            <th>Venue</th>
+
+            <th>Booking Date</th>
+
+            <th></th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @item.BookingId
+                </td>
+
+                <td>
+                    @item.Customer?.FullName
+                </td>
+
+                <td>
+                    @item.Customer?.Email
+                </td>
+
+                <td>
+                    @item.Event?.EventName
+                </td>
+
+                <td>
+                    @item.Event?.EventDate
+                </td>
+
+                <td>
+                    @item.Event?.Venue?.VenueName
+                </td>
+
+                <td>
+                    @item.BookingDate
+                </td>
+
+                <td>
+
+                    <a asp-action="Edit"
+                           asp-route-id="@item.BookingId">
+                        Edit
+                    </a> |
+
+                    <a asp-action="Details"
+                           asp-route-id="@item.BookingId">
+                        Details
+                    </a> |
+
+                    <a asp-action="Delete"
+                           asp-route-id="@item.BookingId">
+                        Delete
+                    </a>
+
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+
+</table>
