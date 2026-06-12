@@ -22,12 +22,51 @@ namespace EventEaseBookingSystem.Controllers
         }
 
         // GET: Events
-        public async Task<IActionResult> Index()
+        // GET: Events
+        public async Task<IActionResult> Index(
+     string? eventType,
+     DateTime? startDate,
+     DateTime? endDate,
+     bool? venueAvailable)
         {
-            var events = _context.Events.Include(e => e.Venue);
+            var events = _context.Events
+                .Include(e => e.Venue)
+                .Include(e => e.EventType)
+                .AsQueryable();
+
+            // Filter by Event Type
+            if (!string.IsNullOrEmpty(eventType))
+            {
+                events = events.Where(e => e.EventType.EventTypeName == eventType);
+            }
+
+            // Filter by Start Date
+            if (startDate.HasValue)
+            {
+                events = events.Where(e => e.EventDate >= startDate.Value);
+            }
+
+            // Filter by End Date
+            if (endDate.HasValue)
+            {
+                events = events.Where(e => e.EventDate <= endDate.Value);
+            }
+
+            // Filter by Venue Availability
+            if (venueAvailable.HasValue)
+            {
+                events = events.Where(e => e.Venue.IsAvailable == venueAvailable.Value);
+            }
+
+            ViewBag.EventTypes = _context.EventTypes.ToList();
+
+            ViewBag.SelectedEventType = eventType;
+            ViewBag.StartDate = startDate?.ToString("yyyy-MM-dd");
+            ViewBag.EndDate = endDate?.ToString("yyyy-MM-dd");
+            ViewBag.SelectedVenueAvailable = venueAvailable;
+
             return View(await events.ToListAsync());
         }
-
         // GET: Events/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -35,6 +74,7 @@ namespace EventEaseBookingSystem.Controllers
 
             var @event = await _context.Events
                 .Include(e => e.Venue)
+                .Include(e => e.EventType)
                 .FirstOrDefaultAsync(e => e.EventId == id);
 
             if (@event == null) return NotFound();
@@ -52,6 +92,8 @@ namespace EventEaseBookingSystem.Controllers
             }
 
             ViewBag.VenueId = new SelectList(_context.Venues, "VenueId", "VenueName");
+            ViewBag.EventTypeId = new SelectList(_context.EventTypes, "EventTypeId", "EventTypeName");
+
             return View();
         }
 
@@ -78,6 +120,12 @@ namespace EventEaseBookingSystem.Controllers
                         "VenueName",
                         @event.VenueId);
 
+                    ViewBag.EventTypeId = new SelectList(
+                         _context.EventTypes,
+                         "EventTypeId",
+                         "EventTypeName",
+                         @event.EventTypeId);
+
                     return View(@event);
                 }
 
@@ -101,6 +149,12 @@ namespace EventEaseBookingSystem.Controllers
                 "VenueName",
                 @event.VenueId);
 
+            ViewBag.EventTypeId = new SelectList(
+                _context.EventTypes,
+                "EventTypeId",
+                "EventTypeName",
+                @event.EventTypeId);
+
             return View(@event);
         }
 
@@ -112,7 +166,18 @@ namespace EventEaseBookingSystem.Controllers
             var @event = await _context.Events.FindAsync(id);
             if (@event == null) return NotFound();
 
-            ViewBag.VenueId = new SelectList(_context.Venues, "VenueId", "VenueName", @event.VenueId);
+            ViewBag.VenueId = new SelectList(
+               _context.Venues,
+              "VenueId",
+              "VenueName",
+              @event.VenueId);
+
+            ViewBag.EventTypeId = new SelectList(
+                _context.EventTypes,
+                "EventTypeId",
+                "EventTypeName",
+                @event.EventTypeId);
+
             return View(@event);
         }
 
@@ -141,6 +206,7 @@ namespace EventEaseBookingSystem.Controllers
                 existingEvent.EventDate = @event.EventDate;
                 existingEvent.Description = @event.Description;
                 existingEvent.VenueId = @event.VenueId;
+                existingEvent.EventTypeId = @event.EventTypeId;
 
                 // Upload NEW image if selected
                 if (@event.ImageFile != null)
@@ -156,11 +222,17 @@ namespace EventEaseBookingSystem.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.VenueId =
-                new SelectList(_context.Venues,
-                               "VenueId",
-                               "VenueName",
-                               @event.VenueId);
+            ViewBag.VenueId = new SelectList(
+                _context.Venues,
+                "VenueId",
+                "VenueName",
+                @event.VenueId);
+
+            ViewBag.EventTypeId = new SelectList(
+                _context.EventTypes,
+                "EventTypeId",
+                "EventTypeName",
+                @event.EventTypeId);
 
             return View(@event);
         }
